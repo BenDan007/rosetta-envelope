@@ -87,3 +87,27 @@ def generate_simple_pdf(
             output_path.write_bytes(base_pdf.read_bytes())
 
     return output_path
+
+
+def read_envelope_from_pdf(path: str | Path) -> dict[str, Any]:
+    """Read the Rosetta Envelope JSON payload from PDF metadata.
+
+    This only supports PDFs containing `/RosettaEnvelopeJson` metadata,
+    such as files produced by `generate_simple_pdf`.
+    """
+    try:
+        from pypdf import PdfReader
+    except ImportError as exc:
+        raise RuntimeError(
+            "PDF support requires optional dependencies. Install with: "
+            'pip install -e ".[pdf]"'
+        ) from exc
+
+    reader = PdfReader(str(path))
+    metadata = reader.metadata or {}
+    raw = metadata.get("/RosettaEnvelopeJson")
+    if raw is None:
+        raise ValueError("No /RosettaEnvelopeJson metadata found in PDF.")
+    if not isinstance(raw, str):
+        raw = str(raw)
+    return json.loads(raw)

@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .core import build_envelope, decode_qr_payload, encode_qr_payload, verify_envelope
-from .pdf import generate_simple_pdf
+from .pdf import generate_simple_pdf, read_envelope_from_pdf
 from .validation import EnvelopeValidationError, validate_envelope
 
 
@@ -80,6 +80,19 @@ def cmd_generate_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_read_pdf(args: argparse.Namespace) -> int:
+    try:
+        envelope = read_envelope_from_pdf(args.path)
+    except RuntimeError as exc:
+        print(str(exc))
+        return 2
+    except ValueError as exc:
+        print(f"Could not read envelope from PDF: {exc}")
+        return 1
+
+    print(json.dumps(envelope, ensure_ascii=False, indent=2, sort_keys=True))
+    return 0
+
 
 def cmd_validate(args: argparse.Namespace) -> int:
     envelope = _load_json(args.file)
@@ -113,6 +126,10 @@ def build_parser() -> argparse.ArgumentParser:
     demo.add_argument("--output", default="examples/out/demo.pdf")
     demo.add_argument("--secret", default="demo-secret")
     demo.set_defaults(func=cmd_generate_demo)
+
+    read_pdf = sub.add_parser("read-pdf", help="Read Rosetta Envelope JSON metadata from a PDF.")
+    read_pdf.add_argument("path", help="Path to PDF file.")
+    read_pdf.set_defaults(func=cmd_read_pdf)
 
     validate = sub.add_parser("validate", help="Validate an envelope JSON file against the schema.")
     validate.add_argument("file", help="Envelope JSON file to validate.")
