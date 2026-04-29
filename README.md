@@ -1,110 +1,111 @@
 # Rosetta Envelope
 
-**Rosetta Envelope** is a small open-source proof of concept for making generated PDFs and paper documents easier for machines and AI agents to read.
+**Anti-OCR for generated documents: attach structure before AI has to guess it.**
 
-The core idea is intentionally simple:
+Rosetta Envelope is a small, open-source proof of concept for generated PDFs and paper documents.
 
-> When a business document is generated, attach a signed structured payload to it, so software does not need to OCR or guess the document structure later.
+Plain English version: when you create a document, also create a structured JSON payload from the same source data, then bind them together so downstream software can read the structure directly instead of reconstructing it from layout.
 
-This project is **not** an OCR replacement, not a universal PDF parser, and not a finished standard. It is a minimal experiment around:
+---
 
-- structured JSON payloads for generated documents
-- PDF metadata embedding
-- QR / matrix-code friendly payloads
-- document hashes
-- demo signatures
-- AI-readable document workflows
+## Before / after
 
-## Why this exists
+```text
+Before
+------
+System A -> PDF (human layout)
+             -> OCR / parsing / guessing -> System B JSON
 
-PDFs and printed documents are usually optimized for human eyes. AI systems and business software often have to reconstruct structure from layout, OCR, or heuristics.
-
-Rosetta Envelope explores a different approach:
-
-1. Generate a human-readable document.
-2. Generate a machine-readable JSON payload from the same source data.
-3. Bind them together with hashes and signatures.
-4. Store the payload in the PDF and/or print a QR code on the page.
-5. Let downstream systems read the structured payload directly.
-
-## What this project does today
-
-This repository currently provides a small Python package that can:
-
-- build a canonical structured envelope
-- compute stable SHA-256 hashes
-- add a demo HMAC signature
-- compress and encode an envelope for QR usage
-- decode QR payload text back into JSON
-- generate a simple demo PDF with an optional QR code footer
-
-## What this project does not do
-
-Rosetta Envelope does **not** claim to:
-
-- end OCR
-- understand all documents
-- preserve all semantic meaning
-- replace PDF, QR codes, XML, EDI, Peppol, Factur-X, ZUGFeRD, or e-invoicing standards
-- provide production-grade cryptographic signing
-- define a global standard
-
-It is a small building block for experiments.
-
-## Example payload
-
-```json
-{
-  "protocol": "rosetta-envelope",
-  "version": "0.1.0",
-  "document_id": "demo-invoice-001",
-  "document_type": "invoice",
-  "issuer": "Example Ltd",
-  "fields": {
-    "invoice_number": "INV-2026-0001",
-    "buyer": "Acme Corp",
-    "currency": "GBP",
-    "total_amount": 1280.0
-  },
-  "payload_hash": "...",
-  "signature": {
-    "algorithm": "HMAC-SHA256-DEMO",
-    "value": "..."
-  }
-}
+After (Rosetta Envelope)
+------------------------
+System A -> PDF + envelope JSON (same source data)
+             -> read structured payload directly -> System B JSON
 ```
 
-## Install locally
+---
+
+## Quickstart
+
+### 1) Install locally
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/rosetta-envelope.git
 cd rosetta-envelope
 python -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -e ".[pdf,test]"
+pip install -e ".[pdf,validate]"
 ```
 
-## Try the demo
+- `pdf` adds demo PDF generation + PDF metadata reading.
+- `validate` adds JSON Schema validation.
+
+### 2) Generate a demo PDF
 
 ```bash
-rosetta-envelope pack examples/invoice.json
-rosetta-envelope unpack "ros0:..."
 rosetta-envelope generate-demo --output examples/out/demo.pdf
 ```
 
-The PDF demo requires optional dependencies:
+### 3) Read the envelope back from that PDF
 
 ```bash
-pip install -e ".[pdf]"
+rosetta-envelope read-pdf examples/out/demo.pdf
 ```
 
-## Repository status
+### 4) Validate an example JSON file
 
-This is an early concept repo. The recommended use is experimentation, discussion, and prototype building.
+```bash
+rosetta-envelope validate examples/invoice.json
+```
+
+---
+
+## What this is
+
+- A minimal envelope format (`protocol`, `document_id`, `fields`, hashes, optional signature).
+- A Python package + CLI for packing/unpacking payloads and generating a demo PDF.
+- A way to experiment with structure-first document workflows for generated documents.
+
+## What this is not
+
+- Not an OCR replacement.
+- Not a universal parser for arbitrary PDFs or scans.
+- Not a production trust framework yet.
+- Not a claim that AI can "understand all documents" from this alone.
+
+---
+
+## Why this might matter
+
+- Many business documents start as structured data, then lose structure when rendered to PDF/print.
+- OCR and layout heuristics are useful, but brittle and expensive to maintain.
+- Carrying a signed/hashed payload with the document can reduce ambiguity for downstream automation.
+
+---
+
+## Demo workflow
+
+1. Start with source data (for example, invoice fields).
+2. Build an envelope JSON with hashes/signature.
+3. Embed it in PDF metadata and QR text.
+4. Read payload back using `read-pdf` (metadata path) or `unpack` (QR payload path).
+5. Validate schema and verify signatures according to your trust model.
+
+---
 
 ## Roadmap
 
-See [`docs/roadmap.md`](docs/roadmap.md).
+See [`docs/roadmap.md`](docs/roadmap.md) for upcoming work (schema evolution, stronger signing, QR chunking, browser demo).
+
+## Security / trust warning
+
+This is a proof-of-concept. Current demo signing is HMAC-based and not a full production trust system.
+
+Read [`SECURITY.md`](SECURITY.md) before using this beyond local experiments.
+
+## Spec and design notes
+
+- Draft spec: [`docs/spec.md`](docs/spec.md)
+- Positioning notes: [`docs/positioning.md`](docs/positioning.md)
 
 ## License
 
