@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rosetta-envelope"
+version = "0.1.0"
+description = "A proof-of-concept structured payload envelope for generated PDFs and paper documents."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Rosetta Envelope contributors" }
+]
+keywords = ["pdf", "qr", "document-ai", "structured-data", "ocr", "metadata"]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+pdf = [
+  "qrcode[pil]>=7.4.2",
+  "reportlab>=4.0.0",
+  "pypdf>=4.0.0",
+]
+test = [
+  "pytest>=8.0.0",
+]
+
+[project.scripts]
+rosetta-envelope = "rosetta_envelope.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

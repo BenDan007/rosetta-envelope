@@ -1,0 +1,23 @@
+{
+  "document_id": "demo-invoice-001",
+  "document_type": "invoice",
+  "issuer": "Example Ltd",
+  "fields": {
+    "invoice_number": "INV-2026-0001",
+    "buyer": "Acme Corp",
+    "seller": "Example Ltd",
+    "currency": "GBP",
+    "total_amount": 1280.0,
+    "line_items": [
+      {
+        "description": "Demo sensor",
+        "quantity": 2,
+        "unit_price": 640.0,
+        "amount": 1280.0
+      }
+    ]
+  },
+  "metadata": {
+    "note": "Example data only."
+  }
+}

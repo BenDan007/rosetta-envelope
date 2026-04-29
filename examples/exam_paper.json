@@ -1,0 +1,24 @@
+{
+  "document_id": "demo-exam-001",
+  "document_type": "exam_paper",
+  "issuer": "Example School",
+  "fields": {
+    "title": "Algebra Practice Paper",
+    "grade": "Year 8",
+    "questions": [
+      {
+        "id": "Q1",
+        "type": "single_choice",
+        "stem": "Solve x + 3 = 7.",
+        "options": {
+          "A": "2",
+          "B": "3",
+          "C": "4",
+          "D": "5"
+        },
+        "answer": "C",
+        "knowledge_point": "linear_equations"
+      }
+    ]
+  }
+}
