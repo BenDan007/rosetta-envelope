@@ -1,0 +1,30 @@
+{
+  "created_at_unix": 1777483409,
+  "document_id": "demo-invoice-001",
+  "document_type": "invoice",
+  "fields": {
+    "buyer": "Acme Corp",
+    "currency": "GBP",
+    "invoice_number": "INV-2026-0001",
+    "line_items": [
+      {
+        "amount": 1280.0,
+        "description": "Demo sensor",
+        "quantity": 2,
+        "unit_price": 640.0
+      }
+    ],
+    "seller": "Example Ltd",
+    "total_amount": 1280.0
+  },
+  "issuer": "Example Ltd",
+  "metadata": {},
+  "payload_hash": "611acf74a98ea3d0ae5365a2beb332d19ab18a04a884cf4739863c4298742a51",
+  "protocol": "rosetta-envelope",
+  "signature": {
+    "algorithm": "HMAC-SHA256-DEMO",
+    "value": "c6c2efbfb1a89f9170c24b9a48ffd384a1f6f9d6e022494c389bf3067b7250f6"
+  },
+  "source_hash": null,
+  "version": "0.1.0"
+}
