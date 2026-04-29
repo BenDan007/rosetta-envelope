@@ -20,4 +20,8 @@ __all__ = [
     "sha256_hex",
     "sign_hmac_demo",
     "verify_envelope",
+    "EnvelopeValidationError",
+    "validate_envelope",
 ]
+
+from .validation import EnvelopeValidationError, validate_envelope

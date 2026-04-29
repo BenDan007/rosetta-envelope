@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://rosetta-envelope.local/schemas/envelope.schema.json",
+  "title": "Rosetta Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol",
+    "version",
+    "document_id",
+    "document_type",
+    "created_at_unix",
+    "fields",
+    "metadata",
+    "payload_hash"
+  ],
+  "properties": {
+    "protocol": {"type": "string", "const": "rosetta-envelope"},
+    "version": {"type": "string", "minLength": 1},
+    "document_id": {"type": "string", "minLength": 1},
+    "document_type": {"type": "string", "minLength": 1},
+    "created_at_unix": {"type": "integer", "minimum": 0},
+    "issuer": {"type": ["string", "null"]},
+    "source_hash": {"type": ["string", "null"]},
+    "fields": {"type": "object"},
+    "metadata": {"type": "object"},
+    "payload_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "value"],
+      "properties": {
+        "algorithm": {"type": "string", "minLength": 1},
+        "value": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

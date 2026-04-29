@@ -24,6 +24,9 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
+validate = [
+  "jsonschema>=4.0.0",
+]
 pdf = [
   "qrcode[pil]>=7.4.2",
   "reportlab>=4.0.0",
@@ -31,6 +34,7 @@ pdf = [
 ]
 test = [
   "pytest>=8.0.0",
+  "jsonschema>=4.0.0",
 ]
 
 [project.scripts]

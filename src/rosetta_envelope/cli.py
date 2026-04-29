@@ -7,6 +7,7 @@ from typing import Any
 
 from .core import build_envelope, decode_qr_payload, encode_qr_payload, verify_envelope
 from .pdf import generate_simple_pdf
+from .validation import EnvelopeValidationError, validate_envelope
 
 
 def _load_json(path: str | Path) -> dict[str, Any]:
@@ -79,6 +80,21 @@ def cmd_generate_demo(args: argparse.Namespace) -> int:
     return 0
 
 
+
+def cmd_validate(args: argparse.Namespace) -> int:
+    envelope = _load_json(args.file)
+    try:
+        validate_envelope(envelope)
+    except EnvelopeValidationError as exc:
+        print(f"Invalid envelope: {exc}")
+        return 1
+    except RuntimeError as exc:
+        print(str(exc))
+        return 2
+
+    print("Envelope is valid.")
+    return 0
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="rosetta-envelope")
     sub = parser.add_subparsers(required=True)
@@ -97,6 +113,10 @@ def build_parser() -> argparse.ArgumentParser:
     demo.add_argument("--output", default="examples/out/demo.pdf")
     demo.add_argument("--secret", default="demo-secret")
     demo.set_defaults(func=cmd_generate_demo)
+
+    validate = sub.add_parser("validate", help="Validate an envelope JSON file against the schema.")
+    validate.add_argument("file", help="Envelope JSON file to validate.")
+    validate.set_defaults(func=cmd_validate)
 
     return parser
 
