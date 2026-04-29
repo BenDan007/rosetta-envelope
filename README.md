@@ -1,5 +1,7 @@
 # Rosetta Envelope
 
+[![Tests](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/rosetta-envelope/tests.yml?label=tests)](../../actions/workflows/tests.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE) [![Latest Release](https://img.shields.io/github/v/release/YOUR_USERNAME/rosetta-envelope)](../../releases) [![Python >=3.10](https://img.shields.io/badge/python-%3E%3D3.10-blue)](pyproject.toml)
+
 **Anti-OCR for generated documents: attach structure before AI has to guess it.**
 
 Rosetta Envelope is a small, open-source proof of concept for generated PDFs and paper documents.
