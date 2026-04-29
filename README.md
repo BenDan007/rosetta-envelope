@@ -45,6 +45,8 @@ pip install -e ".[pdf,validate]"
 rosetta-envelope generate-demo --output examples/out/demo.pdf
 ```
 
+Want a quick look without running anything first? See committed demo artifacts in [`examples/demo/`](examples/demo/).
+
 ### 3) Read the envelope back from that PDF
 
 ```bash
